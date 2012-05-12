@@ -13,8 +13,11 @@ class PacManGame {
   List<Player> players;
   List<Player> ghosts;
   Board board;
+  Timer gameLoop;
+  final int frequency = 100;
   PacManGame(this.board) : players = [], ghosts = [] {
     this.board.printBoard();
+    gameLoop = new Timer.repeating(frequency, (Timer t){ this.gameStep(); });
   }
   Player addPlayer(){
     Player p = new Player(pacman == null, 0, 0);
@@ -44,6 +47,12 @@ class PacManGame {
     if(index !== -1) {
       ghosts.removeRange(index, 1);
     }
+  }
+  
+  void gameStep() {
+    print('hello world!');
+    //moveAllPlayers();
+    //collisionDetection();
   }
   
 }
