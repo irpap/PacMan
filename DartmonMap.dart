@@ -22,6 +22,8 @@ class DartmonMap {
     map[7] = "#          #";
     map[8] = "#  .       #";
     map[9] = "############";
+    map[10] = "############";
+    map[11] = "############";
 
     render(ctx);
   }
@@ -50,10 +52,10 @@ class DartmonMap {
   }
 
 
-  final ImageElement spriteTest; //  = document.query("#sprite1");
-  final ImageElement wall; //  = document.query("#sprite2");
+  final ImageElement spriteTest;
+  final ImageElement wall;
 
-  final List<String> map; // = new List<String>(boardSize);
+  final List<String> map;
 
   CanvasElement _canvas;
   CanvasRenderingContext2D _ctx;

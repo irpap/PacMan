@@ -1,7 +1,7 @@
 #library("PacMan");
 
 #import('dart:html');
-#import('Player.dart');
+#import('ClientPlayer.dart');
 
 /* TODO: Switch to interface */
 class Sprite /* default PacManSprite */ {
@@ -9,14 +9,13 @@ class Sprite /* default PacManSprite */ {
   static final int height = 32;
 
   final List<ImageElement> allFrames; // may need different for different directions if can't rotate image for rendering.
-  final Player player;
 
   num frameNum = 0;
 
-  Sprite(final List<ImageElement> this.allFrames, Player this.player) {
+  Sprite(final List<ImageElement> this.allFrames) {
   }
 
-  void render(ctx) {
+  void render(CanvasRenderingContext2D ctx, ClientPlayer player) {
     ctx.drawImage(allFrames[frameNum], player.x * width, player.y * height);
     // TODO: Handle player.direction
   }
