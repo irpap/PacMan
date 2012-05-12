@@ -5,40 +5,34 @@
 #import('Player.dart');
 #import('ConnectedPlayer.dart');
 #import('Message.dart');
+#import('PacManGame.dart');
 #import('Board.dart');
 
 class PacManManager {
-  
-  ConnectedPlayer pacman;
+  PacManGame game;
+  int connectionCount = 0;
   List<ConnectedPlayer> players;
-  List<ConnectedPlayer> ghosts;
-  int playerCount = 0;
-  Board board;
-  PacManManager(this.board): players = [], ghosts = [];
-  
-  ConnectedPlayer getPlayerById(int id) {
-    for(ConnectedPlayer p in players) {
-      if(p.id == id) {
-        return p;
-      }
-    }
-    return null;
+  PacManManager() : players = [] {
+  Board b = new Board(
+  '''
+_#.._#..._#_
+_#.._#..._#_
+_#.._#..._#_
+_#.._#..._#_
+_#.._#..._#_
+_#.._#..._#_
+_#.._#..._#_'''
+  );
+    this.game = new PacManGame(b);
   }
   
   
   //get a connection; create a player and listen for messages!
   void onOpenConnection(WebSocketConnection conn) {
-    ConnectedPlayer p;
-    if(pacman == null) {
-      p = new ConnectedPlayer(new Player(true, 0, 0), playerCount, conn);
-      pacman = p;
-    }
-    else {
-      p = new ConnectedPlayer(new Player(false, 0, 0), playerCount, conn);
-      ghosts.add(p);
-    }
+    
+    ConnectedPlayer p = new ConnectedPlayer(game.addPlayer(), connectionCount, conn);
     players.add(p);
-    playerCount += 1;
+    connectionCount += 1;
     
     //handle incoming messages on the socket
     conn.onMessage = (message) {
@@ -60,7 +54,7 @@ class PacManManager {
   
   void handlePlayerDirectionMessage(ConnectedPlayer p, PlayerDirectionMessage m) {
     //update our internal representation
-    p.player.direction = m.direction;
+    game.setPlayerDirection(p.player, m.direction);
     
     //send an update to all other players
     for(ConnectedPlayer player in players) {
@@ -83,15 +77,8 @@ class PacManManager {
       
     }
     
-    //delete player from lists
-    int index = players.indexOf(p);
-    if(index !== -1) {
-      players.removeRange(index, 1);
-    }
-    index = ghosts.indexOf(p);
-    if(index !== -1) {
-      ghosts.removeRange(index, 1);
-    }
+    game.handlePlayerDisconnect(p.player);
+    
   }
   
   void _sendMessageToAll(Message m) {
@@ -124,19 +111,7 @@ void main() {
   WebSocketHandler wsHandler = new WebSocketHandler();
   server.addRequestHandler((req) => req.path == "/ws", wsHandler.onRequest);
   
-  Board b = new Board(
-    '''
-    _#.._#..._#_
-    _#.._#..._#_
-    _#.._#..._#_
-    _#.._#..._#_
-    _#.._#..._#_
-    _#.._#..._#_
-    _#.._#..._#_'''
-    );
-
-    b.printBoard();
- PacManManager game = new PacManManager(b);
+ PacManManager game = new PacManManager();
   
   wsHandler.onOpen = (WebSocketConnection conn) {
     game.onOpenConnection(conn);
