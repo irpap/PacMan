@@ -7,6 +7,7 @@
 #import('Message.dart');
 #import('Board.dart');
 #import('PacManServer.dart');
+#import('tile.dart');
 
 class PacManGame {
   Player pacman;
@@ -14,6 +15,9 @@ class PacManGame {
   List<Player> ghosts;
   Board board;
   Timer gameLoop;
+  final double stepSize = Tile.size / 10; 
+  final double ghostStepSize = Tile.size / 15; 
+
   final int frequency = 100;
   PacManGame(this.board) : players = [], ghosts = [] {
     this.board.printBoard();
@@ -37,7 +41,7 @@ class PacManGame {
   }
   
   void handlePlayerDisconnect(Player p) {
-
+    
     //delete player from lists
     int index = players.indexOf(p);
     if(index !== -1) {
@@ -50,9 +54,47 @@ class PacManGame {
   }
   
   void gameStep() {
-    print('hello world!');
-    //moveAllPlayers();
+    moveAllPlayers();
     //collisionDetection();
   }
+  void moveAllPlayers() {
+    for (Player player in players) {
+      movePlayerForwardIfSpace(player);
+    }
+  }
+  
+  void movePlayerForwardIfSpace(Player player) {
+    double step = player.isPacMan ? this.stepSize : this.ghostStepSize;
+    
+    double nextx = player.x;
+    double nexty = player.y;
+    if(player.direction == 'N') {
+      nexty -= step;
+    }
+    else if(player.direction == 'S') {
+      nexty += step;
+    }
+    else if(player.direction == 'E') {
+      nextx -= step;
+    }
+    else if(player.direction == 'W') {
+      nextx += step;
+    }   
+    
+    if (board.withinBounds(nextx, nexty) && board.getTile(nextx, nexty).type != '#') {
+      player.x = nextx;
+      player.y = nexty;
+    }
+    else if(board.withinBounds(nextx, nexty)) {
+      if(player.direction == 'N' || player.direction == 'S') {
+        nexty = player.y.floor() + 0.5;
+      }
+      else if(player.direction == 'E' || player.direction == 'W') {
+        nextx -= player.x.floor() + 0.5;
+      }
+    }
+    
+    //if you weren't at the edge, go to the edge;
+}
   
 }

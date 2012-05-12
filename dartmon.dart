@@ -2,12 +2,11 @@
 
 #import('dart:html');
 #import('dart:core');
-
+#import('tile.dart');
+#import('DartmonMap.dart');
 #import("Sprite.dart");
 #import("ClientPlayer.dart");
 
-#source('tile.dart');
-#source('DartmonMap.dart');
 
 void main() {
   show('Pleasent message!');

@@ -1,30 +1,24 @@
+#library('PacMan');
+
 class Tile {
-  int width;
-  int height;
+  static final num size = 1;
   int x;
   int y;
-  bool solid;
-  
-  Tile(int tx, int ty, int tw, int th, bool ts)
-  {
-    width = tw;
-    height = th;
-    x = tx;
-    y = ty;
-    solid = ts;
-  }
-  
-  bool Collides(Tile other)
+  String type;  
+  Tile(this.x, this.y, this.type);
+
+  //TODO: delete this!
+  /*bool Collides(Tile other)
   {
     return(Inside(other.x, other.y) || Inside(other.x + other.width, other.y) ||
         Inside(other.x, other.y + other.height) || Inside(other.x + other.width, other.y + other.height)
         || Inside(other.x + other.width / 2, other.y) || Inside(other.x + other.width / 2, other.y + other.height) ||
         Inside(other.x, other.y + other.height / 2) || Inside(other.x + other.width, other.y + other.height / 2) ||
         Inside(other.x + other.width / 2, other.y + other.height / 2));
-  }
+  }*/
   
   bool Inside(int ox, int oy)
   {
-    return (ox >= x && ox < x + width) && (oy >= y && oy < y + height);
+    return (ox >= x && ox < x + size) && (oy >= y && oy < y + size);
   }
 }
