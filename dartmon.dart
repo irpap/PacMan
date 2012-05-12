@@ -2,9 +2,11 @@
 
 #import('dart:html');
 #import('dart:core');
-
 #import('tile.dart');
 #import('DartmonMap.dart');
+#import("Sprite.dart");
+#import("ClientPlayer.dart");
+
 
 void main() {
   show('Pleasent message!');
@@ -20,40 +22,25 @@ class Dartmon
   Dartmon()
   {
     _canvas = document.query("#canvas");
-    _ctx = _canvas.getContext("2d");   
-    
+    _ctx = _canvas.getContext("2d");
+
     dartMap = new DartmonMap(_canvas, _ctx);
-    
-    infoDiv = document.query("#info");
-    infoDiv.innerHTML = "Key: " + 123;
-    infoDiv.text = "SSx";
-    
-    //HTMLElement body = document.query("html");
-    
+
+    List<ImageElement> frames = [document.query("#player")];
+    Sprite sprite = new Sprite(frames);
+    player = new ClientPlayer(true, 5.0, 5.0, sprite);
+    player.render(_ctx);
+
     document.on.keyDown.add((KeyboardEvent e) {
       int kc = e.keyCode;
-      infoDiv.innerHTML = "Key: " + kc;
+      show("Key: " + kc);
     }, true);
   }
-  
-  void drawSeed(num x, num y) {
-    _ctx.beginPath();
-    _ctx.lineWidth = 2;
-    _ctx.fillStyle = ORANGE;
-    _ctx.strokeStyle = ORANGE;
-    _ctx.arc(x, y, 5, 0, TAU, false);
-    _ctx.fill();
-    _ctx.closePath();
-    _ctx.stroke();
-  }
-  
+
+  ClientPlayer player;
   DartmonMap dartMap;
-  
+
   CanvasElement _canvas;
   CanvasRenderingContext2D _ctx;
-  
-  DivElement infoDiv;
 
-  static final String ORANGE = "orange";
-  static final TAU = Math.PI * 2;
 }
