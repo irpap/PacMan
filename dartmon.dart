@@ -1,8 +1,13 @@
+#library('PacMan');
+
 #import('dart:html');
 #import('dart:core');
 
+#source('tile.dart');
+#source('DartmonMap.dart');
+
 void main() {
-  show('FARKORF!');
+  show('Pleasent message!');
   new Dartmon();
 }
 
@@ -19,10 +24,15 @@ class Dartmon
     
     dartMap = new DartmonMap(_canvas, _ctx);
     
-    player = new Player();
+    infoDiv = document.query("#info");
+    infoDiv.innerHTML = "Key: " + 123;
+    infoDiv.text = "SSx";
     
-    _canvas.on.keyPress.add((KeyboardEvent e) {
+    //HTMLElement body = document.query("html");
+    
+    document.on.keyDown.add((KeyboardEvent e) {
       int kc = e.keyCode;
+      infoDiv.innerHTML = "Key: " + kc;
     }, true);
   }
   
@@ -42,91 +52,8 @@ class Dartmon
   CanvasElement _canvas;
   CanvasRenderingContext2D _ctx;
   
-  Player player;
+  DivElement infoDiv;
 
   static final String ORANGE = "orange";
   static final TAU = Math.PI * 2;
-}
-
-class DartmonMap
-{
-  int tileSize = 32;
-  int boardSize = 12;
- 
-  DartmonMap(CanvasElement canvas, CanvasRenderingContext2D ctx)
-  {
-    canvas.width = tileSize * boardSize;
-    canvas.height = tileSize * boardSize;
-    
-    ImageElement spriteTest = document.query("#sprite1");
-    ImageElement wall = document.query("#sprite2");
-        
-    List<String> map = new List<String>(boardSize);
-  
-    map[0] = "############";
-    map[1] = "#..........#";
-    map[2] = "#  .   S   #";
-    map[3] = "#   .      #";
-    map[4] = "#   .      #";
-    map[5] = "#   .      #";
-    map[6] = "#          #";
-    map[7] = "#          #";
-    map[8] = "#  .       #";
-    map[9] = "############";
-    
-    
-    
-    for(var c = 0; c < map.length; c++)
-    {
-      String line = map[c];
-      for(var i = 0; i < line.length; i++)
-      {
-        bool solid = false;
-        if(line.substring(i).startsWith("#"))
-        {
-          ctx.drawImage(wall, i * tileSize, c * tileSize);
-          solid = true;
-        }
-        else if(line.substring(i).startsWith("."))
-        {
-          ctx.drawImage(spriteTest, i * tileSize, c * tileSize);
-        }
-        
-        
-      }
-    }
-  }
-    
-    CanvasElement _canvas;
-    CanvasRenderingContext2D _ctx;
-    
-    List<List<Tile>> data;
-}
-
-class Tile
-{
-  int size = 32;
-  bool solid;
-  int x;
-  int y;
-  
-  Tile(int xp, int yp, bool c)
-  {
-    xp = x;
-    yp = y;
-    solid = c;
-  }
-  
-  
-}
-
-class Player
-{
-  Player()
-  {
-    player = document.query("#player");
-  }
-  
-  ImageElement player;
-  
 }
