@@ -1,3 +1,6 @@
+#library('PacMan');
+#import('dart:html');
+#import('tile.dart');
 class DartmonMap {
   int tileSize = 32;
   int boardSize = 12;
@@ -23,7 +26,9 @@ class DartmonMap {
     map[6] = "#          #";
     map[7] = "#          #";
     map[8] = "#  .       #";
-    map[9] = "############";
+    map[9] = "#  .       #";
+    map[10] = "#  .       #";
+    map[11] = "############";
     
     
     
@@ -44,7 +49,7 @@ class DartmonMap {
           ctx.drawImage(spriteTest, i * tileSize, c * tileSize);
         }
         
-        data[c][i] = new Tile(i * tileSize, c * tileSize, tileSize, tileSize, solid);
+        data[c][i] = new Tile(i, c, line[i]);
       }
     }
   }

@@ -3,8 +3,8 @@
 #import('dart:html');
 #import('dart:core');
 
-#source('tile.dart');
-#source('DartmonMap.dart');
+#import('tile.dart');
+#import('DartmonMap.dart');
 
 void main() {
   show('Pleasent message!');
