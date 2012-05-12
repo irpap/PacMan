@@ -27,7 +27,7 @@ class Dartmon
 
     dartMap = new DartmonMap(_canvas, _ctx);
 
-    List<ImageElement> frames = [document.query("#player")];
+    List<ImageElement> frames = [document.query("#player"), document.query("#sprite1")];
     Sprite sprite = new Sprite(frames);
     player = new ClientPlayer(true, 5.0, 5.0, sprite);
     player.render(_ctx);
@@ -36,6 +36,23 @@ class Dartmon
       int kc = e.keyCode;
       show("Key: " + kc);
     }, true);
+
+    startGame();
+  }
+
+  void startGame() {
+    window.webkitRequestAnimationFrame(update);
+  }
+
+  bool update(num highResTime) {
+    // TODO: collisions
+    render();
+    window.webkitRequestAnimationFrame(update);
+    return false;
+  }
+
+  void render() {
+    player.render(_ctx);
   }
 
   ClientPlayer player;
