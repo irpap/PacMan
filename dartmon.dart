@@ -2,7 +2,7 @@
 #import('dart:core');
 
 void main() {
-  show('FARKORF!');
+  show('Pleasent message!');
   new Dartmon();
 }
 
@@ -21,8 +21,14 @@ class Dartmon
     
     player = new Player();
     
-    _canvas.on.keyPress.add((KeyboardEvent e) {
+    infoDiv = document.query("#info");
+    infoDiv.innerHTML = "Key: " + 123;
+    
+    //HTMLElement body = document.query("html");
+    
+    document.on.keyDown.add((KeyboardEvent e) {
       int kc = e.keyCode;
+      infoDiv.innerHTML = "Key: " + kc;
     }, true);
   }
   
@@ -43,10 +49,44 @@ class Dartmon
   CanvasRenderingContext2D _ctx;
   
   Player player;
+  
+  DivElement infoDiv;
 
   static final String ORANGE = "orange";
   static final TAU = Math.PI * 2;
 }
+
+class Tile {
+  int width;
+  int height;
+  int x;
+  int y;
+  bool solid;
+  
+  Tile(int tx, int ty, int tw, int th, bool ts)
+  {
+    width = tw;
+    height = th;
+    x = tx;
+    y = ty;
+    solid = ts;
+  }
+  
+  bool Collides(Tile other)
+  {
+    return(Inside(other.x, other.y) || Inside(other.x + other.width, other.y) ||
+        Inside(other.x, other.y + other.height) || Inside(other.x + other.width, other.y + other.height)
+        || Inside(other.x + other.width / 2, other.y) || Inside(other.x + other.width / 2, other.y + other.height) ||
+        Inside(other.x, other.y + other.height / 2) || Inside(other.x + other.width, other.y + other.height / 2) ||
+        Inside(other.x + other.width / 2, other.y + other.height / 2));
+  }
+  
+  bool Inside(int ox, int oy)
+  {
+    return (ox >= x && ox < x + width) && (oy >= y && oy < y + height);
+  }
+}
+
 
 class DartmonMap
 {
@@ -60,6 +100,8 @@ class DartmonMap
     
     ImageElement spriteTest = document.query("#sprite1");
     ImageElement wall = document.query("#sprite2");
+    
+    data = new List<List<Tile>>(boardSize);
         
     List<String> map = new List<String>(boardSize);
   
@@ -79,6 +121,7 @@ class DartmonMap
     for(var c = 0; c < map.length; c++)
     {
       String line = map[c];
+      data[c] = new List<Tile>(boardSize);
       for(var i = 0; i < line.length; i++)
       {
         bool solid = false;
@@ -92,7 +135,7 @@ class DartmonMap
           ctx.drawImage(spriteTest, i * tileSize, c * tileSize);
         }
         
-        
+        data[c][i] = new Tile(i * tileSize, c * tileSize, tileSize, tileSize, solid);
       }
     }
   }
@@ -101,23 +144,6 @@ class DartmonMap
     CanvasRenderingContext2D _ctx;
     
     List<List<Tile>> data;
-}
-
-class Tile
-{
-  int size = 32;
-  bool solid;
-  int x;
-  int y;
-  
-  Tile(int xp, int yp, bool c)
-  {
-    xp = x;
-    yp = y;
-    solid = c;
-  }
-  
-  
 }
 
 class Player
