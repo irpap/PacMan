@@ -7,14 +7,14 @@
 #import('Message.dart');
 #import('Board.dart');
 
-class PacManGame {
+class PacManManager {
   
   ConnectedPlayer pacman;
   List<ConnectedPlayer> players;
   List<ConnectedPlayer> ghosts;
   int playerCount = 0;
   Board board;
-  PacManGame(this.board): players = [], ghosts = [];
+  PacManManager(this.board): players = [], ghosts = [];
   
   ConnectedPlayer getPlayerById(int id) {
     for(ConnectedPlayer p in players) {
@@ -24,6 +24,7 @@ class PacManGame {
     }
     return null;
   }
+  
   
   //get a connection; create a player and listen for messages!
   void onOpenConnection(WebSocketConnection conn) {
@@ -115,6 +116,7 @@ class PacManGame {
       }
     }
   }
+  
 }
 
 void main() {
@@ -134,8 +136,7 @@ void main() {
     );
 
     b.printBoard();
-    
-  PacManGame game = new PacManGame(b);
+ PacManManager game = new PacManManager(b);
   
   wsHandler.onOpen = (WebSocketConnection conn) {
     game.onOpenConnection(conn);
